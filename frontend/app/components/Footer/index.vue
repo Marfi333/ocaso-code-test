@@ -24,19 +24,19 @@
     @apply bg-white border-t border-gray-200 mt-auto;
 
     &__container {
-      @apply max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8;
+      @apply max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8;
     }
 
     &__content {
-      @apply flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0;
+      @apply flex flex-col space-y-6;
     }
 
     &__menus {
-      @apply flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8;
+      @apply w-full;
     }
 
     &__copyright {
-      @apply text-center md:text-right text-gray-500 text-sm;
+      @apply text-center text-gray-500 text-sm pt-6 border-t border-gray-100;
     }
   }
 </style>
