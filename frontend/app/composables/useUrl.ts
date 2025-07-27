@@ -17,7 +17,14 @@ export const useUrl = () => {
     return `/${locale.value}/${url}`
   }
 
+  const getLocalizedHomePage = () => {
+    return locale.value === defaultLocale
+      ? '/'
+      : `/${locale.value}`
+  }
+
   return {
-    getLocalizedUrl
+    getLocalizedUrl,
+    getLocalizedHomePage
   }
 }
