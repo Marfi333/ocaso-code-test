@@ -19,7 +19,7 @@
             :alt="slide.image?.alternativeText || ''"
             :loading="index === 0 ? 'eager' : 'lazy'"
             :fetchpriority="index === 0 ? 'high' : 'auto'"
-            class="hero-slide__image"
+            :class="slide.mobileImage ? 'hero-slide__image' : 'hero-slide__image hero-slide__image--fallback'"
           />
           <SharedStrapiPicture
             v-if="slide.mobileImage"
@@ -60,7 +60,7 @@ Swiper
 
 <style scoped>
   .hero-slider-container {
-    @apply relative w-full overflow-hidden;
+    @apply relative w-full overflow-hidden max-w-full;
     height: 350px;
   }
 
@@ -71,6 +71,7 @@ Swiper
   }
 
   .hero-slider {
+    /* TODO: Remove magic numbers */
     @apply relative w-full h-full;
     margin-left: calc(-50vw + 50%);
     margin-right: calc(-50vw + 50%);
@@ -82,16 +83,20 @@ Swiper
   }
 
   .hero-slide {
-    @apply relative w-full h-full bg-gray-200;
+    @apply relative w-full h-full bg-transparent;
   }
 
   .hero-slide__image,
   .hero-slide__mobile-image {
-    @apply w-full h-full;
+    @apply w-full h-full absolute top-0 left-0;
   }
 
   .hero-slide__image {
     @apply hidden md:block;
+    
+    &--fallback {
+      @apply block;
+    }
   }
 
   .hero-slide__mobile-image {
@@ -101,7 +106,8 @@ Swiper
   :deep(.hero-slide__image img),
   :deep(.hero-slide__mobile-image img) {
     @apply w-full h-full object-cover object-center;
-    max-width: 100vw;
+    max-width: none;
+    display: block;
   }
 
   :deep(.swiper-button-next),
