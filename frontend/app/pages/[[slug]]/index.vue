@@ -29,6 +29,7 @@
   const siteOptions = inject<Ref<StrapiResponse<SiteOption> | null>>('siteOptions');
   const graphql = useStrapiGraphQL();
   const { pageFields } = usePageGraphQLFields();
+  const { updateCurrentPageInfo } = useLocaleNavigation();
 
   const pageQueryKey = computed(() => {
     return `pageData-${locale.value}-${route.params.slug || 'homepage'}`;
@@ -71,7 +72,16 @@
       try {
         const response = await graphql<StrapiGraphQLResponse<GraphQLPage>>(query, variables);
         const pages = response.data?.pages;
-        return pages?.[0] ? { data: pages[0] } : null;
+        const page = pages?.[0];
+        
+        if (page) {
+          const isHomepage = !router.currentRoute.value.params.slug;
+          updateCurrentPageInfo(page.documentId, page.slug, isHomepage);
+          
+          return { data: page };
+        }
+        
+        return null;
       } catch (error) {
         console.error('GraphQL query failed:', error);
         throw createError({

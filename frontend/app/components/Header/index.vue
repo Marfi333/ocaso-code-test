@@ -25,7 +25,7 @@
               :key="l.code"
               :class="['lang-switcher__btn', { 'lang-switcher__btn--active': l.code === currentLocale }]"
               :disabled="l.code === currentLocale"
-              @click="setLocale(l.code)"
+              @click="handleLocaleChange(l.code)"
             >
               {{ l.code.toUpperCase() }}
             </button>
@@ -47,15 +47,22 @@
 <script setup lang="ts">
   import type { SiteOption } from '~/types/strapi';
   const { t } = useI18n();
-  const { getLocalizedHomePage } = useUrl()
 
   defineProps<{
     siteOptions: SiteOption;
   }>();
 
-  const { locale, locales, setLocale } = useI18n();
+  const { locale, locales } = useI18n();
+  const { navigateToLocale, getLocalizedHomePage } = useLocaleNavigation();
   const currentLocale = locale;
   const availableLocales = locales;
+
+  // Handle locale change with smart navigation
+  const handleLocaleChange = async (newLocale: 'de' | 'en') => {
+    if (newLocale !== currentLocale.value) {
+      await navigateToLocale(newLocale);
+    }
+  };
 
   // Scroll behavior state
   const isHeaderHidden = ref(false);

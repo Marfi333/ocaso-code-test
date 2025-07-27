@@ -143,8 +143,8 @@ defineProps<{
   menuItems: MenuItem[];
 }>();
 
-const { getLocalizedUrl } = useUrl();
-const { locale, locales, setLocale } = useI18n();
+const { locale, locales } = useI18n();
+const { navigateToLocale, getLocalizedUrl } = useLocaleNavigation();
 
 const isOpen = ref(false);
 const expandedItems = ref(new Set<string>());
@@ -170,9 +170,11 @@ const closeMenu = () => {
   expandedItems.value.clear();
 };
 
-const handleLocaleChange = (newLocale: 'de' | 'en') => {
-  setLocale(newLocale);
-  closeMenu();
+const handleLocaleChange = async (newLocale: 'de' | 'en') => {
+  if (newLocale !== currentLocale.value) {
+    await navigateToLocale(newLocale);
+    closeMenu();
+  }
 };
 
 // Lock scroll when menu is open

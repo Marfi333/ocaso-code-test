@@ -46,7 +46,7 @@
 
   const route = useRoute();
   const { t } = useI18n();
-  const { getLocalizedUrl } = useUrl();
+  const { getLocalizedUrl } = useLocaleNavigation();
 
   const isActiveLink = (url: string) => {
     if (!url) return false;

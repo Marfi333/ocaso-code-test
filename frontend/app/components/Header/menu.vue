@@ -62,7 +62,7 @@ defineProps<{
   menuItems: MenuItem[];
 }>();
 
-const { getLocalizedUrl } = useUrl()
+const { getLocalizedUrl } = useLocaleNavigation();
 const { t } = useI18n();
 
 const menuRef = ref();
