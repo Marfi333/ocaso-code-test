@@ -33,25 +33,13 @@
   }>();
 
   const route = useRoute();
-  const {t, locale } = useI18n();
+  const { t } = useI18n();
+  const { getLocalizedUrl } = useUrl()
 
   const isActiveLink = (url: string) => {
     if (!url) return false;
     return route.path === url;
   };
-
-  const getLocalizedUrl = (url: string) => {
-    if (!url) return '';
-    // If it's already a full URL, return as is
-    if (url.startsWith('http')) return url;
-    // If it's the default locale, return without prefix
-    const config = useRuntimeConfig();
-    const defaultLocale = config.public.i18n?.defaultLocale || 'en';
-    if (locale.value === defaultLocale) return url;
-    // For other locales, add the locale prefix
-    return `/${locale.value}${url}`;
-  };
-
 </script>
 
 <style lang="scss" scoped>

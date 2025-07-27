@@ -62,7 +62,8 @@ defineProps<{
   menuItems: MenuItem[];
 }>();
 
-const { t, locale } = useI18n();
+const { getLocalizedUrl } = useUrl()
+const { t } = useI18n();
 
 const menuRef = ref();
 const activeDropdown = ref<string | null>(null);
@@ -76,18 +77,6 @@ const hasSubItems = (item: MenuItem) => {
   return item.subItems && item.subItems.length > 0;
 };
 
-const getLocalizedUrl = (item: MenuItem) => {
-  const url = item.url || item.page?.slug;
-  if (!url) return '';
-  // If it's already a full URL, return as is
-  if (url.startsWith('http')) return url;
-  // If it's the default locale, return without prefix
-  const config = useRuntimeConfig();
-  const defaultLocale = config.public.i18n?.defaultLocale || 'en';
-  if (locale.value === defaultLocale) return url;
-  // For other locales, add the locale prefix
-  return `/${locale.value}${url}`;
-};
 </script>
 
 <style lang="scss" scoped>
