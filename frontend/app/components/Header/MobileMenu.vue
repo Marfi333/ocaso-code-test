@@ -20,7 +20,7 @@
         leave="ease-in-out duration-300"
         leave-from="opacity-100"
         leave-to="opacity-0"
-        class="fixed inset-0 transition-opacity bg-gray-600 bg-opacity-75"
+        class="fixed inset-0 z-20 transition-opacity bg-gray-600 bg-opacity-75"
       />
 
       <div class="fixed inset-0 overflow-hidden">

@@ -98,7 +98,7 @@
 <style lang="scss" scoped>
   .header {
     @apply bg-white shadow-sm border-b border-gray-200;
-    @apply fixed top-0 left-0 right-0;
+    @apply fixed top-0 left-0 right-0 z-10;
     @apply transition-transform duration-300 ease-in-out;
 
     &--hidden {
