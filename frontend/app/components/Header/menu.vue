@@ -1,5 +1,5 @@
 <template>
-  <ul class="menu">
+  <ul ref="menuRef" class="menu">
     <li v-for="item in menuItems" :key="item.label" class="menu__item">
       <NuxtLink
         v-if="item.url || item.page?.slug"
@@ -10,19 +10,31 @@
       >
         {{ item.label }}
       </NuxtLink>
+      <button
+        v-else-if="hasSubItems(item)"
+        class="flex items-center gap-1 menu__link menu__link--parent"
+        :class="{ 'text-gray-900 bg-gray-50': activeDropdown === item.label }"
+        @click="activeDropdown = activeDropdown === item.label ? null : item.label"
+      >
+        {{ item.label }}
+        <Icon 
+          :name="activeDropdown === item.label ? 'heroicons:chevron-up' : 'heroicons:chevron-down'"
+          class="w-4 h-4"
+        />
+      </button>
       <span
         v-else
-        class="menu__link"
-        :class="{
-          'menu__link--parent': hasSubItems(item),
-          'menu__link--disabled': !hasSubItems(item),
-        }"
+        class="menu__link menu__link--disabled"
       >
         {{ item.label }}
       </span>
 
       <!-- Sub-menu -->
-      <ul v-if="item.subItems && item.subItems.length > 0" class="menu__submenu">
+      <ul 
+        v-if="item.subItems && item.subItems.length > 0" 
+        v-show="activeDropdown === item.label"
+        class="menu__submenu"
+      >
         <li v-for="subItem in item.subItems" :key="subItem.label" class="menu__submenu-item">
           <NuxtLink
             v-if="subItem.url || subItem.page?.slug"
@@ -30,6 +42,7 @@
             :target="subItem.target"
             :title="t('menu.navigateTo', { label: subItem.label })"
             class="menu__submenu-link"
+            @click="activeDropdown = null"
           >
             {{ subItem.label }}
           </NuxtLink>
@@ -43,78 +56,82 @@
 </template>
 
 <script setup lang="ts">
-  import type { MenuItem } from '~/types/strapi';
+import type { MenuItem } from '~/types/strapi';
 
-  defineProps<{
-    menuItems: MenuItem[];
-  }>();
+defineProps<{
+  menuItems: MenuItem[];
+}>();
 
-  const { t, locale } = useI18n();
+const { t, locale } = useI18n();
 
-  const hasSubItems = (item: MenuItem) => {
-    return item.subItems && item.subItems.length > 0;
-  };
+const menuRef = ref();
+const activeDropdown = ref<string | null>(null);
 
-  const getLocalizedUrl = (item: MenuItem) => {
-    const url = item.url || item.page?.slug;
-    if (!url) return '';
-    // If it's already a full URL, return as is
-    if (url.startsWith('http')) return url;
-    // If it's the default locale, return without prefix
-    const config = useRuntimeConfig();
-    const defaultLocale = config.public.i18n?.defaultLocale || 'en';
-    if (locale.value === defaultLocale) return url;
-    // For other locales, add the locale prefix
-    return `/${locale.value}${url}`;
-  };
+// Close dropdown when clicking outside
+onClickOutside(menuRef, () => {
+  activeDropdown.value = null;
+});
+
+const hasSubItems = (item: MenuItem) => {
+  return item.subItems && item.subItems.length > 0;
+};
+
+const getLocalizedUrl = (item: MenuItem) => {
+  const url = item.url || item.page?.slug;
+  if (!url) return '';
+  // If it's already a full URL, return as is
+  if (url.startsWith('http')) return url;
+  // If it's the default locale, return without prefix
+  const config = useRuntimeConfig();
+  const defaultLocale = config.public.i18n?.defaultLocale || 'en';
+  if (locale.value === defaultLocale) return url;
+  // For other locales, add the locale prefix
+  return `/${locale.value}${url}`;
+};
 </script>
 
 <style lang="scss" scoped>
-  .menu {
-    @apply flex space-x-8;
+.menu {
+  @apply flex space-x-8 items-center;
 
-    &__item {
-      @apply relative;
+  &__item {
+    @apply relative;
+  }
+
+  &__link {
+    @apply text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+
+    &.router-link-active {
+      @apply text-blue-600 bg-blue-50;
     }
 
-    &__link {
-      @apply text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200;
-
-      &.router-link-active {
-        @apply text-blue-600 bg-blue-50;
-      }
-
-      &--parent {
-        @apply cursor-pointer hover:text-gray-900;
-      }
-
-      &--disabled {
-        @apply text-gray-400 cursor-not-allowed;
-      }
+    &--parent {
+      @apply cursor-pointer hover:text-gray-900 bg-transparent border-0;
     }
 
-    &__submenu {
-      @apply absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg py-2 min-w-48 z-10 hidden;
-
-      .menu__item:hover & {
-        @apply block;
-      }
-    }
-
-    &__submenu-item {
-      @apply block;
-    }
-
-    &__submenu-link {
-      @apply block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200;
-
-      &.router-link-active {
-        @apply text-blue-600 bg-blue-50;
-      }
-
-      &--disabled {
-        @apply text-gray-400 cursor-not-allowed hover:bg-transparent;
-      }
+    &--disabled {
+      @apply text-gray-400 cursor-not-allowed;
     }
   }
+
+  &__submenu {
+    @apply absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg py-2 min-w-48 z-10;
+  }
+
+  &__submenu-item {
+    @apply block;
+  }
+
+  &__submenu-link {
+    @apply block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200;
+
+    &.router-link-active {
+      @apply text-blue-600 bg-blue-50;
+    }
+
+    &--disabled {
+      @apply text-gray-400 cursor-not-allowed hover:bg-transparent;
+    }
+  }
+}
 </style>

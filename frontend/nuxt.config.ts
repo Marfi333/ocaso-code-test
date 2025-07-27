@@ -166,6 +166,7 @@ export default defineNuxtConfig({
     // 'nuxt-cron', // not needed for now
     'nuxt-og-image',
     'nuxt-swiper',
+    '@nuxt/icon',
   ],
 
   security: {
