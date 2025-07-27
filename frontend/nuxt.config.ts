@@ -167,6 +167,7 @@ export default defineNuxtConfig({
     'nuxt-og-image',
     'nuxt-swiper',
     '@nuxt/icon',
+    'nuxt-headlessui'
   ],
 
   security: {

@@ -28,6 +28,7 @@
     "autoprefixer": "^10.4.21",
     "eslint": "^9.30.1",
     "nuxt": "4.0.0",
+    "nuxt-headlessui": "^1.2.1",
     "nuxt-security": "^2.2.0",
     "nuxt-swiper": "^2.0.1",
     "postcss": "^8.5.6",

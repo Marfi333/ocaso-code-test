@@ -4,7 +4,7 @@
       <div class="header__content">
         <!-- Logo -->
         <div class="header__logo-section">
-          <NuxtLink to="/" class="header__logo" aria-label="Home" :title="t('header.logo.title')">
+          <NuxtLink :to="getLocalizedHomePage()" class="header__logo" aria-label="Home" :title="t('header.logo.title')">
             <SharedStrapiImage
               :media="siteOptions.siteLogo"
               image-class="header__logo-image"
@@ -30,15 +30,18 @@
         <nav class="header__nav">
           <HeaderMenu :menu-items="siteOptions?.headerMenu?.menuItems || []" />
         </nav>
+
+        <!-- Mobile menu -->
+        <HeaderMobileMenu class="md:hidden" :menu-items="siteOptions?.headerMenu?.menuItems || []" />
       </div>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-  import { HeaderMenu } from '#components';
   import type { SiteOption } from '~/types/strapi';
   const { t } = useI18n();
+  const { getLocalizedHomePage } = useUrl()
 
   defineProps<{
     siteOptions: SiteOption;

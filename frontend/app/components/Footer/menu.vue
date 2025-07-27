@@ -7,11 +7,11 @@
           <li v-for="subItem in menuItem.subItems" :key="subItem.label" class="footer-menu__item">
             <NuxtLink
               v-if="subItem.url"
-              :to="getLocalizedUrl(subItem.url)"
+              :to="getLocalizedUrl(subItem)"
               :target="subItem.target"
               class="footer-menu__link"
               :title="t('menu.navigateTo', { label: subItem.label })"
-              :class="{ 'footer-menu__link--active': isActiveLink(getLocalizedUrl(subItem.url)) }"
+              :class="{ 'footer-menu__link--active': isActiveLink(getLocalizedUrl(subItem)) }"
             >
               {{ subItem.label }}
             </NuxtLink>
