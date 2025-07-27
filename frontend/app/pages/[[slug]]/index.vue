@@ -73,14 +73,14 @@
         const response = await graphql<StrapiGraphQLResponse<GraphQLPage>>(query, variables);
         const pages = response.data?.pages;
         const page = pages?.[0];
-        
+
         if (page) {
           const isHomepage = !router.currentRoute.value.params.slug;
           updateCurrentPageInfo(page.documentId, page.slug, isHomepage);
-          
+
           return { data: page };
         }
-        
+
         return null;
       } catch (error) {
         console.error('GraphQL query failed:', error);

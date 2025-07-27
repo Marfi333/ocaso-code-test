@@ -17,24 +17,17 @@
         @click="activeDropdown = activeDropdown === item.label ? null : item.label"
       >
         {{ item.label }}
-        <Icon 
+        <Icon
           :name="activeDropdown === item.label ? 'heroicons:chevron-up' : 'heroicons:chevron-down'"
           class="w-4 h-4"
         />
       </button>
-      <span
-        v-else
-        class="menu__link menu__link--disabled"
-      >
+      <span v-else class="menu__link menu__link--disabled">
         {{ item.label }}
       </span>
 
       <!-- Sub-menu -->
-      <ul 
-        v-if="item.subItems && item.subItems.length > 0" 
-        v-show="activeDropdown === item.label"
-        class="menu__submenu"
-      >
+      <ul v-if="item.subItems && item.subItems.length > 0" v-show="activeDropdown === item.label" class="menu__submenu">
         <li v-for="subItem in item.subItems" :key="subItem.label" class="menu__submenu-item">
           <NuxtLink
             v-if="subItem.url || subItem.page?.slug"
@@ -56,71 +49,70 @@
 </template>
 
 <script setup lang="ts">
-import type { MenuItem } from '~/types/strapi';
+  import type { MenuItem } from '~/types/strapi';
 
-defineProps<{
-  menuItems: MenuItem[];
-}>();
+  defineProps<{
+    menuItems: MenuItem[];
+  }>();
 
-const { getLocalizedUrl } = useLocaleNavigation();
-const { t } = useI18n();
+  const { getLocalizedUrl } = useLocaleNavigation();
+  const { t } = useI18n();
 
-const menuRef = ref();
-const activeDropdown = ref<string | null>(null);
+  const menuRef = ref();
+  const activeDropdown = ref<string | null>(null);
 
-// Close dropdown when clicking outside
-onClickOutside(menuRef, () => {
-  activeDropdown.value = null;
-});
+  // Close dropdown when clicking outside
+  onClickOutside(menuRef, () => {
+    activeDropdown.value = null;
+  });
 
-const hasSubItems = (item: MenuItem) => {
-  return item.subItems && item.subItems.length > 0;
-};
-
+  const hasSubItems = (item: MenuItem) => {
+    return item.subItems && item.subItems.length > 0;
+  };
 </script>
 
 <style lang="scss" scoped>
-.menu {
-  @apply flex space-x-8 items-center;
+  .menu {
+    @apply flex space-x-8 items-center;
 
-  &__item {
-    @apply relative;
-  }
-
-  &__link {
-    @apply text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200;
-
-    &.router-link-active {
-      @apply text-blue-600 bg-blue-50;
+    &__item {
+      @apply relative;
     }
 
-    &--parent {
-      @apply cursor-pointer hover:text-gray-900 bg-transparent border-0;
+    &__link {
+      @apply text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200;
+
+      &.router-link-active {
+        @apply text-blue-600 bg-blue-50;
+      }
+
+      &--parent {
+        @apply cursor-pointer hover:text-gray-900 bg-transparent border-0;
+      }
+
+      &--disabled {
+        @apply text-gray-400 cursor-not-allowed;
+      }
     }
 
-    &--disabled {
-      @apply text-gray-400 cursor-not-allowed;
-    }
-  }
-
-  &__submenu {
-    @apply absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg py-2 min-w-48 z-10;
-  }
-
-  &__submenu-item {
-    @apply block;
-  }
-
-  &__submenu-link {
-    @apply block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200;
-
-    &.router-link-active {
-      @apply text-blue-600 bg-blue-50;
+    &__submenu {
+      @apply absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg py-2 min-w-48 z-10;
     }
 
-    &--disabled {
-      @apply text-gray-400 cursor-not-allowed hover:bg-transparent;
+    &__submenu-item {
+      @apply block;
+    }
+
+    &__submenu-link {
+      @apply block px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200;
+
+      &.router-link-active {
+        @apply text-blue-600 bg-blue-50;
+      }
+
+      &--disabled {
+        @apply text-gray-400 cursor-not-allowed hover:bg-transparent;
+      }
     }
   }
-}
 </style>

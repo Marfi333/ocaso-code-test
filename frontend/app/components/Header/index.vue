@@ -1,9 +1,9 @@
 <template>
-  <header 
+  <header
     class="header"
     :class="{
       'header--hidden': isHeaderHidden,
-      'header--visible': !isHeaderHidden
+      'header--visible': !isHeaderHidden,
     }"
   >
     <div class="header__container">
@@ -72,22 +72,22 @@
   // Handle scroll behavior
   const handleScroll = () => {
     const currentScrollY = window.scrollY;
-    
+
     if (currentScrollY <= scrollThreshold) {
       isHeaderHidden.value = false;
       lastScrollY.value = currentScrollY;
       return;
     }
-    
+
     const scrollDifference = currentScrollY - lastScrollY.value;
-    
+
     if (Math.abs(scrollDifference) > scrollThreshold) {
       if (scrollDifference > 0) {
         isHeaderHidden.value = true;
       } else {
         isHeaderHidden.value = false;
       }
-      
+
       lastScrollY.value = currentScrollY;
     }
   };

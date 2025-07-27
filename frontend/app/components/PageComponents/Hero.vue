@@ -1,10 +1,6 @@
 <template>
   <div class="hero">
-    <SharedStrapiPicture 
-      :media="picture" 
-      :alt="picture?.alternativeText || ''"
-      class="w-full h-auto"
-    />
+    <SharedStrapiPicture :media="picture" :alt="picture?.alternativeText || ''" class="w-full h-auto" />
   </div>
 </template>
 
@@ -19,4 +15,4 @@
   }>();
 
   const picture = component.picture;
-</script> 
+</script>

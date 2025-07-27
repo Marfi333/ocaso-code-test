@@ -1,10 +1,6 @@
 <template>
   <figure class="image-component">
-    <SharedStrapiPicture 
-      :media="image" 
-      :alt="image?.alternativeText || ''"
-      class="w-full h-auto"
-    />
+    <SharedStrapiPicture :media="image" :alt="image?.alternativeText || ''" class="w-full h-auto" />
   </figure>
 </template>
 
@@ -19,4 +15,4 @@
   }>();
 
   const image = component.image;
-</script> 
+</script>

@@ -14,7 +14,7 @@
         >
           {{ menuItem.label }}
         </NuxtLink>
-        
+
         <ul v-if="menuItem.subItems && menuItem.subItems.length > 0" class="footer-menu__list">
           <li v-for="subItem in menuItem.subItems" :key="subItem.label" class="footer-menu__item">
             <NuxtLink
@@ -84,7 +84,7 @@
       @apply transition-colors duration-200;
       @apply border-b border-transparent hover:border-gray-300;
       @apply pb-0.5;
-      
+
       &.router-link-active {
         @apply text-blue-600 border-blue-300;
       }
@@ -107,14 +107,14 @@
   @media (min-width: 641px) {
     .footer-menu {
       @apply flex-wrap flex-row gap-x-8 gap-y-6;
-      
+
       &__block {
         @apply flex-wrap flex-row gap-x-6 gap-y-4;
       }
-      
+
       &__section {
         @apply pb-0;
       }
     }
   }
-</style> 
+</style>

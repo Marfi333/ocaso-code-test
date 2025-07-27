@@ -10,13 +10,13 @@ export const useStrapiImage = () => {
       try {
         // Parse the original URL
         const originalUrl = new URL(url);
-        
+
         // Parse the custom domain URL
         const domainUrl = new URL(customDomain);
-        
+
         // Create new URL with the custom domain and /media path
         const newUrl = new URL('/media' + originalUrl.pathname, domainUrl.origin);
-        
+
         return newUrl.toString();
       } catch (error) {
         // Fallback to original URL if URL parsing fails

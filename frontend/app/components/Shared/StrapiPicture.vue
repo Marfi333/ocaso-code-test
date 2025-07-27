@@ -1,7 +1,7 @@
 <template>
   <picture v-if="media" :class="imageClass">
-    <source v-if="webpSrcset" type="image/webp" :sizes="sizes" :srcset="webpSrcset" >
-    <source v-if="fallbackSrcset" :type="media?.mime || 'image/jpeg'" :sizes="sizes" :srcset="fallbackSrcset" >
+    <source v-if="webpSrcset" type="image/webp" :sizes="sizes" :srcset="webpSrcset" />
+    <source v-if="fallbackSrcset" :type="media?.mime || 'image/jpeg'" :sizes="sizes" :srcset="fallbackSrcset" />
     <img
       :src="fallbackUrl"
       :alt="imageAlt"
@@ -9,7 +9,7 @@
       :sizes="sizes"
       :width="media?.width || 800"
       :height="media?.height || 600"
-    >
+    />
   </picture>
 </template>
 

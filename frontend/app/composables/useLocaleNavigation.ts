@@ -1,4 +1,4 @@
-import type { MenuItem } from '~/types/strapi'
+import type { MenuItem } from '~/types/strapi';
 
 export const useLocaleNavigation = () => {
   const router = useRouter();
@@ -10,16 +10,16 @@ export const useLocaleNavigation = () => {
     slug?: string;
     isHomepage: boolean;
   }>('currentPageInfo', () => ({
-    isHomepage: false
+    isHomepage: false,
   }));
 
   const updateCurrentPageInfo = (documentId?: string, slug?: string, isHomepage = false) => {
     currentPageInfo.value = {
       documentId,
       slug,
-      isHomepage
+      isHomepage,
     };
-  }
+  };
 
   const findPageInLocale = async (targetLocale: string): Promise<string | null> => {
     try {
@@ -48,7 +48,7 @@ export const useLocaleNavigation = () => {
           };
         }>(query, {
           locale: targetLocale,
-          documentId: currentPageInfo.value.documentId
+          documentId: currentPageInfo.value.documentId,
         });
 
         const page = response.data?.pages?.[0];
@@ -64,17 +64,17 @@ export const useLocaleNavigation = () => {
       console.error('Error finding page in locale:', error);
       return null;
     }
-  }
+  };
 
   const navigateToLocale = async (targetLocale: string) => {
     try {
       const targetUrl = await findPageInLocale(targetLocale);
-      
+
       if (targetUrl) {
         await router.push(targetUrl);
       } else {
         // Fallback to home page
-        throw new Error('Page not found')
+        throw new Error('Page not found');
       }
     } catch (error) {
       console.error('Error navigating to locale:', error);
@@ -82,27 +82,25 @@ export const useLocaleNavigation = () => {
       const homeUrl = targetLocale === defaultLocale ? '/' : `/${targetLocale}`;
       await router.push(homeUrl);
     }
-  }
+  };
 
   const getLocalizedUrl = (item: MenuItem) => {
-    const url = item.url ?? item.page?.slug
-    if (!url) return ''
+    const url = item.url ?? item.page?.slug;
+    if (!url) return '';
 
     // If it's already a full URL, return as is
-    if (url.startsWith('http')) return url
+    if (url.startsWith('http')) return url;
 
     // If it's the default locale, return without prefix
-    if (locale.value === defaultLocale) return url
+    if (locale.value === defaultLocale) return url;
 
     // For other locales, add the locale prefix
-    return `/${locale.value}/${url}`
-  }
+    return `/${locale.value}/${url}`;
+  };
 
   const getLocalizedHomePage = () => {
-    return locale.value === defaultLocale
-      ? '/'
-      : `/${locale.value}`
-  }
+    return locale.value === defaultLocale ? '/' : `/${locale.value}`;
+  };
 
   return {
     currentPageInfo: readonly(currentPageInfo),
@@ -110,6 +108,6 @@ export const useLocaleNavigation = () => {
     findPageInLocale,
     navigateToLocale,
     getLocalizedHomePage,
-    getLocalizedUrl
-  }
+    getLocalizedUrl,
+  };
 };

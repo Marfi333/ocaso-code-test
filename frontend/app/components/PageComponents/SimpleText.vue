@@ -1,6 +1,8 @@
 <template>
-  <div class="px-4 mt-4 mb-8 prose md:mx-auto md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl prose-base max-w-none simple-text">
-    <div v-html="text"/>
+  <div
+    class="px-4 mt-4 mb-8 prose md:mx-auto md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl prose-base max-w-none simple-text"
+  >
+    <div v-html="text" />
   </div>
 </template>
 
@@ -15,4 +17,4 @@
   }>();
 
   const text = component.text;
-</script> 
+</script>

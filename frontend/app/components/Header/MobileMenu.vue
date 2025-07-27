@@ -8,11 +8,7 @@
       <Icon name="heroicons:bars-3" class="w-6 h-6" />
     </button>
 
-    <HeadlessDialog 
-      :open="isOpen" 
-      @close="closeMenu"
-      class="relative z-50 md:hidden"
-    >
+    <HeadlessDialog :open="isOpen" @close="closeMenu" class="relative z-50 md:hidden">
       <HeadlessDialogBackdrop
         enter="ease-in-out duration-300"
         enter-from="opacity-0"
@@ -62,7 +58,7 @@
                         :key="l.code"
                         :class="[
                           'px-3 py-2 border border-gray-300 bg-gray-100 cursor-pointer rounded font-bold transition-colors duration-200',
-                          { 'bg-gray-800 text-white cursor-default': l.code === currentLocale }
+                          { 'bg-gray-800 text-white cursor-default': l.code === currentLocale },
                         ]"
                         :disabled="l.code === currentLocale"
                         @click="handleLocaleChange(l.code)"
@@ -83,7 +79,7 @@
                       >
                         {{ item.label }}
                       </NuxtLink>
-                      
+
                       <div v-else-if="hasSubItems(item)" class="space-y-1">
                         <button
                           class="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 transition-colors duration-200 rounded-md hover:text-gray-900 hover:bg-gray-50"
@@ -91,16 +87,13 @@
                           @click="toggleExpanded(item.label)"
                         >
                           {{ item.label }}
-                          <Icon 
+                          <Icon
                             :name="expandedItems.has(item.label) ? 'heroicons:chevron-up' : 'heroicons:chevron-down'"
                             class="w-4 h-4"
                           />
                         </button>
-                        
-                        <div 
-                          v-show="expandedItems.has(item.label)"
-                          class="ml-4 space-y-1"
-                        >
+
+                        <div v-show="expandedItems.has(item.label)" class="ml-4 space-y-1">
                           <template v-for="subItem in item.subItems" :key="subItem.label">
                             <NuxtLink
                               v-if="subItem.url || subItem.page?.slug"
@@ -120,8 +113,11 @@
                           </template>
                         </div>
                       </div>
-                      
-                      <span v-else class="block px-3 py-2 text-base font-medium text-gray-700 transition-colors duration-200 rounded-md hover:text-gray-900 hover:bg-gray-50 mobile-menu__link--disabled">
+
+                      <span
+                        v-else
+                        class="block px-3 py-2 text-base font-medium text-gray-700 transition-colors duration-200 rounded-md hover:text-gray-900 hover:bg-gray-50 mobile-menu__link--disabled"
+                      >
                         {{ item.label }}
                       </span>
                     </template>
@@ -137,63 +133,63 @@
 </template>
 
 <script setup lang="ts">
-import type { MenuItem } from '~/types/strapi';
+  import type { MenuItem } from '~/types/strapi';
 
-defineProps<{
-  menuItems: MenuItem[];
-}>();
+  defineProps<{
+    menuItems: MenuItem[];
+  }>();
 
-const { locale, locales } = useI18n();
-const { navigateToLocale, getLocalizedUrl } = useLocaleNavigation();
+  const { locale, locales } = useI18n();
+  const { navigateToLocale, getLocalizedUrl } = useLocaleNavigation();
 
-const isOpen = ref(false);
-const expandedItems = ref(new Set<string>());
+  const isOpen = ref(false);
+  const expandedItems = ref(new Set<string>());
 
-const currentLocale = locale;
-const availableLocales = locales;
+  const currentLocale = locale;
+  const availableLocales = locales;
 
-const hasSubItems = (item: MenuItem) => {
-  return item.subItems && item.subItems.length > 0;
-};
+  const hasSubItems = (item: MenuItem) => {
+    return item.subItems && item.subItems.length > 0;
+  };
 
-const toggleExpanded = (itemLabel: string) => {
-  if (expandedItems.value.has(itemLabel)) {
-    expandedItems.value.delete(itemLabel);
-  } else {
-    expandedItems.value.add(itemLabel);
-  }
-  expandedItems.value = new Set(expandedItems.value);
-};
+  const toggleExpanded = (itemLabel: string) => {
+    if (expandedItems.value.has(itemLabel)) {
+      expandedItems.value.delete(itemLabel);
+    } else {
+      expandedItems.value.add(itemLabel);
+    }
+    expandedItems.value = new Set(expandedItems.value);
+  };
 
-const closeMenu = () => {
-  isOpen.value = false;
-  expandedItems.value.clear();
-};
+  const closeMenu = () => {
+    isOpen.value = false;
+    expandedItems.value.clear();
+  };
 
-const handleLocaleChange = async (newLocale: 'de' | 'en') => {
-  if (newLocale !== currentLocale.value) {
-    await navigateToLocale(newLocale);
-    closeMenu();
-  }
-};
+  const handleLocaleChange = async (newLocale: 'de' | 'en') => {
+    if (newLocale !== currentLocale.value) {
+      await navigateToLocale(newLocale);
+      closeMenu();
+    }
+  };
 
-// Lock scroll when menu is open
-watch(isOpen, (newValue) => {
-  if (newValue) {
-    document.body.style.overflow = 'hidden';
-  } else {
+  // Lock scroll when menu is open
+  watch(isOpen, newValue => {
+    if (newValue) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Cleanup on unmount
+  onUnmounted(() => {
     document.body.style.overflow = '';
-  }
-});
-
-// Cleanup on unmount
-onUnmounted(() => {
-  document.body.style.overflow = '';
-});
+  });
 </script>
 
 <style lang="scss" scoped>
-.router-link-active {
-  @apply text-blue-600 bg-blue-50;
-}
-</style> 
+  .router-link-active {
+    @apply text-blue-600 bg-blue-50;
+  }
+</style>

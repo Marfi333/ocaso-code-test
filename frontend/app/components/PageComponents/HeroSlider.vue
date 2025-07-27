@@ -50,12 +50,10 @@
   const props = defineProps<{
     component: HeroSliderComponent;
   }>();
-Swiper
-  const autoplayOptions = computed(() => (
-    props.component?.autoPlayTimerSec
-      ? {delay: props.component.autoPlayTimerSec * 1000}
-      : false
-  ))
+  Swiper;
+  const autoplayOptions = computed(() =>
+    props.component?.autoPlayTimerSec ? { delay: props.component.autoPlayTimerSec * 1000 } : false
+  );
 </script>
 
 <style scoped>
@@ -93,7 +91,7 @@ Swiper
 
   .hero-slide__image {
     @apply hidden md:block;
-    
+
     &--fallback {
       @apply block;
     }
