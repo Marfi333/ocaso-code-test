@@ -166,7 +166,7 @@
     expandedItems.value.clear();
   };
 
-  const handleLocaleChange = async (newLocale: 'de' | 'en') => {
+  const handleLocaleChange = async (newLocale: typeof locales.value[number]['code']) => {
     if (newLocale !== currentLocale.value) {
       await navigateToLocale(newLocale);
       closeMenu();

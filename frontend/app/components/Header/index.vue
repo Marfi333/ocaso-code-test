@@ -58,7 +58,7 @@
   const availableLocales = locales;
 
   // Handle locale change with smart navigation
-  const handleLocaleChange = async (newLocale: 'de' | 'en') => {
+  const handleLocaleChange = async (newLocale: typeof locales.value[number]['code']) => {
     if (newLocale !== currentLocale.value) {
       await navigateToLocale(newLocale);
     }
