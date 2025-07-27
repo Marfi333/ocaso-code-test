@@ -1,5 +1,11 @@
 <template>
-  <header class="header">
+  <header 
+    class="header"
+    :class="{
+      'header--hidden': isHeaderHidden,
+      'header--visible': !isHeaderHidden
+    }"
+  >
     <div class="header__container">
       <div class="header__content">
         <!-- Logo -->
@@ -50,11 +56,58 @@
   const { locale, locales, setLocale } = useI18n();
   const currentLocale = locale;
   const availableLocales = locales;
+
+  // Scroll behavior state
+  const isHeaderHidden = ref(false);
+  const lastScrollY = ref(0);
+  const scrollThreshold = 10;
+
+  // Handle scroll behavior
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+    
+    if (currentScrollY <= scrollThreshold) {
+      isHeaderHidden.value = false;
+      lastScrollY.value = currentScrollY;
+      return;
+    }
+    
+    const scrollDifference = currentScrollY - lastScrollY.value;
+    
+    if (Math.abs(scrollDifference) > scrollThreshold) {
+      if (scrollDifference > 0) {
+        isHeaderHidden.value = true;
+      } else {
+        isHeaderHidden.value = false;
+      }
+      
+      lastScrollY.value = currentScrollY;
+    }
+  };
+
+  onMounted(() => {
+    lastScrollY.value = window.scrollY;
+    window.addEventListener('scroll', handleScroll, { passive: true });
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener('scroll', handleScroll);
+  });
 </script>
 
 <style lang="scss" scoped>
   .header {
     @apply bg-white shadow-sm border-b border-gray-200;
+    @apply fixed top-0 left-0 right-0;
+    @apply transition-transform duration-300 ease-in-out;
+
+    &--hidden {
+      @apply -translate-y-full;
+    }
+
+    &--visible {
+      @apply translate-y-0;
+    }
 
     &__container {
       @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
@@ -69,7 +122,7 @@
     }
 
     &__logo {
-      @apply flex items-center;
+      @apply flex items-center mr-6;
     }
 
     &__logo-image {
